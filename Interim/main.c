@@ -179,7 +179,14 @@ static void InitLSM() {
 
 static void startMag() {
 	//#CS704 - Write SPI commands to initialize Magnetometer
+	uint8_t inData[10];
 
+	// Select operating mode (continuous mode) and power mode (normal mode)
+	inData[0] = 0x0;  // write 0b00000000/0x0 to CFG_REG_A_M
+	BSP_LSM303AGR_WriteReg_Mag(0x60, inData, 1);
+
+	inData[0] = 0x21;  // write 0b00100001/0x21 to CFG_REG_C_M
+	BSP_LSM303AGR_WriteReg_Mag(0x62, inData, 1);
 }
 
 static void startAcc() {
@@ -187,27 +194,47 @@ static void startAcc() {
 	uint8_t inData[10];
 
 	// Enable axes and select power mode (normal mode)
-	inData[0] = 0xA7;  // write 0b01010111/0x57 to CTRL_REG1_A
+	inData[0] = 0x57;  // write 0b01010111/0x57 to CTRL_REG1_A
 	BSP_LSM303AGR_WriteReg_Acc(0x20, inData, 1);
+
+	inData[0] = 0x9;  // write 0b00001001/0x9 to CTRL_REG4_A
+	BSP_LSM303AGR_WriteReg_Acc(0x23, inData, 1);
 }
 
 static void readMag() {
-
 	//#CS704 - Read Magnetometer Data over SPI
+	int32_t magx;
+	int32_t magy;
+	int32_t magz;
+	uint8_t inDataL[10];
+	uint8_t inDataH[10];
+
+	// Read x-axis values
+	BSP_LSM303AGR_ReadReg_Mag(0x68, inDataL, 1);
+	BSP_LSM303AGR_ReadReg_Mag(0x69, inDataH, 1);
+	magx = (inDataH[0] << 8) + inDataL[0];  // concatenate inDataH and inDataL
+
+	// Read y-axis values
+	BSP_LSM303AGR_ReadReg_Mag(0x6A, inDataL, 1);
+	BSP_LSM303AGR_ReadReg_Mag(0x6B, inDataH, 1);
+	magy = (inDataH[0] << 8) + inDataL[0];  // concatenate inDataH and inDataL
+
+	// Read z-axis values
+	BSP_LSM303AGR_ReadReg_Mag(0x6C, inDataL, 1);
+	BSP_LSM303AGR_ReadReg_Mag(0x6D, inDataH, 1);
+	magz = (inDataH[0] << 8) + inDataL[0];  // concatenate inDataH and inDataL
 
 	//#CS704 - store sensor values into the variables below
-	MAG_Value.x = 100;
-	MAG_Value.y = 200;
-	MAG_Value.z = 1000;
-
-//	XPRINTF("MAG=%d,%d,%d\r\n",magx,magy,magz);
+	MAG_Value.x = magx;  // multiply by sensitivity parameter
+	MAG_Value.y = magy;
+	MAG_Value.z = magz;
 }
 
 static void readAcc() {
 	//#CS704 - Read Accelerometer Data over SPI
-	int32_t accx;
-	int32_t accy;
-	int32_t accz;
+	int16_t accx;
+	int16_t accy;
+	int16_t accz;
 	uint8_t inDataL[10];
 	uint8_t inDataH[10];
 
@@ -215,7 +242,6 @@ static void readAcc() {
 	BSP_LSM303AGR_ReadReg_Acc(0x28, inDataL, 1);
 	BSP_LSM303AGR_ReadReg_Acc(0x29, inDataH, 1);
 	accx = (inDataH[0] << 8) + inDataL[0];  // concatenate inDataH and inDataL
-
 
 	// Read y-axis values
 	BSP_LSM303AGR_ReadReg_Acc(0x2A, inDataL, 1);
@@ -231,6 +257,10 @@ static void readAcc() {
 	ACC_Value.x = (int)accx / 16;  // have to divide by 16 even though power mode is normal mode? (should be 4)
 	ACC_Value.y = (int)accy / 16;
 	ACC_Value.z = (int)accz / 16;
+
+//	ACC_Value.x = accx;
+//	ACC_Value.y = accy;
+//	ACC_Value.z = accz;
 }
 
 /**
@@ -324,18 +354,15 @@ int main(void) {
 
 			//*********process sensor data*********
 
-//			COMP_Value.Steps;
-//			COMP_Value.Heading;
-//			COMP_Value.Distance;
+//			COMP_Value.Steps = 50;
+//			COMP_Value.Heading = 75;
+//			COMP_Value.Distance = 100;
 //
 //			XPRINTF("Steps = %d \r\n", (int)COMP_Value.Steps);
 
-//			int32_t acc_x = (ACC_Value.x - pow(2,16)/2) / (int)16;
-//			int32_t acc_y = (ACC_Value.y - pow(2,16)/2) / (int)16;
-//			int32_t acc_z = (ACC_Value.z - pow(2,16)/2) / (int)16;
-//			XPRINTF("Acceleration (mg) = %5d %5d %5d \r\n", acc_x, acc_y, acc_z);
-
-			XPRINTF("Acceleration (mg) = %5d %5d %5d \r\n", ACC_Value.x, ACC_Value.y, ACC_Value.z);
+			XPRINTF("Acceleration (mg) = %5d %5d %5d   ||   Magnetometer (mg) = %5d %5d %5d \r\n",
+					ACC_Value.x, ACC_Value.y, ACC_Value.z,
+					MAG_Value.x, MAG_Value.y, MAG_Value.z);
 		}
 
 		//***************************************************
