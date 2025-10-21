@@ -282,6 +282,50 @@ static void readAcc() {
 	ACC_Value.z = accz;
 }
 
+int local_max = 0;
+int local_min = 0;
+
+float Xin;
+float Yout;
+float Yprev;
+void LPF_A() {
+	//	Y[n] is the current output
+	//	Y[n-1] is the previous output
+	//	X[n] is the current input
+	//	d is the damping factor
+	float d = 0.25;
+
+	// Y[n] = dY[n-1] + (1-d)X[n]
+	Xin = ACC_Value.z;           // input
+	Yout = d*Yprev + (1-d)*Xin;  // filtered output
+	Yprev = Yout;
+
+	ACC_Value.z = Yout;
+}
+
+int buffer_n = 10;
+int y_buffer[10];
+void check_local() {
+	int max_threshold = 1250;
+	int min_threshold = 850;
+
+	// update accelerometer data buffer
+	for (int i = 0; i < buffer_n-1; i++) {
+		y_buffer[i] = y_buffer[i+1];
+	}
+	y_buffer[buffer_n-1] = ACC_Value.z;
+
+	// check for local maximum
+	if ((y_buffer[0] > max_threshold) && (y_buffer[1] < max_threshold)) {
+		local_max = 1;
+	}
+
+	// check for local minimum
+	if ((y_buffer[0] < min_threshold) && (y_buffer[1] > min_threshold)) {
+		local_min = 1;
+	}
+}
+
 /**
  * @brief  Main program
  * @param  None
@@ -371,17 +415,30 @@ int main(void) {
 			readMag();
 			readAcc();
 
+			ACC_Value.x = 980;
+			ACC_Value.y = 980;
+
 			//*********process sensor data*********
 
-//			COMP_Value.Steps = 50;
-//			COMP_Value.Heading = 75;
-//			COMP_Value.Distance = 100;
-//
-//			XPRINTF("Steps = %d \r\n", (int)COMP_Value.Steps);
+			// Accelerometer
+			LPF_A(); // low-pass filter
+			check_local(); // check for local maximum/minimum
 
-			XPRINTF("Acceleration (mg) = %5d %5d %5d   ||   Magnetometer (mg) = %5d %5d %5d \r\n",
-					ACC_Value.x, ACC_Value.y, ACC_Value.z,
-					MAG_Value.x, MAG_Value.y, MAG_Value.z);
+//			XPRINTF("Acceleration (mg) = %5d %5d %5d \r\n", ACC_Value.x, ACC_Value.y, ACC_Value.z);
+
+			// Magnetometer
+
+			XPRINTF("Magnetometer (mG) = %5d %5d %5d \r\n", MAG_Value.x, MAG_Value.y, MAG_Value.z);
+
+			// Step and orientation
+			if (local_max && local_min) {
+				COMP_Value.Steps++;
+				local_max = 0;
+				local_min = 0;
+			}
+
+			COMP_Value.Heading = 75;
+//			XPRINTF("Steps = %d \r\n", (int)COMP_Value.Steps);
 		}
 
 		//***************************************************
@@ -529,7 +586,8 @@ static void InitTimers(void) {
 	/* Set TIM4 instance ( Environmental ) */
 	TimEnvHandle.Instance = TIM4;
 	/* Initialize TIM4 peripheral */
-	TimEnvHandle.Init.Period = 655;
+//	TimEnvHandle.Init.Period = 655;
+	TimEnvHandle.Init.Period = 100; // change timer period to 10ms
 	TimEnvHandle.Init.Prescaler = uwPrescalerValue;
 	TimEnvHandle.Init.ClockDivision = 0;
 	TimEnvHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
