@@ -303,6 +303,33 @@ void LPF_A() {
 	ACC_Value.z = Yout;
 }
 
+float Xin_x, Xin_y;
+float Yout_x, Yout_y;
+float Xprev_x, Xprev_y;
+float Yprev_x, Yprev_y;
+void HPF_M() {
+	//	Y[n] is the current output
+	//	Y[n-1] is the previous output
+	//	X[n] is the current input
+	//  X[n-1] is the previous input
+	//	d is the damping factor
+	float d = 0.25;
+
+	// Y[n] = dY[n-1] + d(X[n] - X[n-1])
+	Xin_x = MAG_Value.x;           // input
+	Yout_x = d*Yprev_x + d*(Xin_x - Xprev_x);  // filtered output
+	Xprev_x = Xin_x;
+	Yprev_x = Yout_x;
+
+	Xin_y = MAG_Value.y;           // input
+	Yout_y = d*Yprev_y + d*(Xin_y - Xprev_y);  // filtered output
+	Xprev_y = Xin_y;
+	Yprev_y = Yout_y;
+
+	MAG_Value.x = Yout_x;
+	MAG_Value.y = Yout_y;
+}
+
 int buffer_n = 10;
 int y_buffer[10];
 void check_local() {
@@ -324,6 +351,29 @@ void check_local() {
 	if ((y_buffer[0] < min_threshold) && (y_buffer[1] > min_threshold)) {
 		local_min = 1;
 	}
+}
+
+void calc_orientation() {
+	int heading_deg;
+
+	// required for negative numbers to work
+	int32_t mx = MAG_Value.x;
+	int32_t my = MAG_Value.y;
+
+	float hx = mx;
+	float hy = my;
+
+	if (hy > 0) {
+		heading_deg = 90 - atan(hx/hy)*180/3.141;
+	} else if (hy < 0) {
+		heading_deg = 270 - atan(hx/hy)*180/3.141;
+	} else if (hy == 0 && hx < 0) {
+		heading_deg = 180;
+	} else if (hy == 0 && hx > 0) {
+		heading_deg = 0;
+	}
+
+	COMP_Value.Heading = heading_deg;
 }
 
 /**
@@ -418,6 +468,10 @@ int main(void) {
 			ACC_Value.x = 980;
 			ACC_Value.y = 980;
 
+			// magnetometer offset
+			MAG_Value.x += 165;
+			MAG_Value.y += 90;
+
 			//*********process sensor data*********
 
 			// Accelerometer
@@ -427,8 +481,10 @@ int main(void) {
 //			XPRINTF("Acceleration (mg) = %5d %5d %5d \r\n", ACC_Value.x, ACC_Value.y, ACC_Value.z);
 
 			// Magnetometer
+//			HPF_M(); // high-pass filter
+			calc_orientation();
 
-			XPRINTF("Magnetometer (mG) = %5d %5d %5d \r\n", MAG_Value.x, MAG_Value.y, MAG_Value.z);
+//			XPRINTF("Magnetometer (mG) = %5d %5d %5d \r\n", MAG_Value.x, MAG_Value.y, MAG_Value.z);
 
 			// Step and orientation
 			if (local_max && local_min) {
@@ -437,8 +493,8 @@ int main(void) {
 				local_min = 0;
 			}
 
-			COMP_Value.Heading = 75;
 //			XPRINTF("Steps = %d \r\n", (int)COMP_Value.Steps);
+//			XPRINTF("Orientation = %d \r\n", COMP_Value.Heading);
 		}
 
 		//***************************************************
