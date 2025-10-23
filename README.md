@@ -1,5 +1,9 @@
 # compsys704_project2
 
-Trying to figure out how to upload STM32CubeIDE project
+1. Clone repo
 
-Added main.c file (all work currently done there) for now
+2. Open workspace in compsys704_project2 directory
+
+3. Import 'Final' directory as project into workspace
+
+4. Build and run project
