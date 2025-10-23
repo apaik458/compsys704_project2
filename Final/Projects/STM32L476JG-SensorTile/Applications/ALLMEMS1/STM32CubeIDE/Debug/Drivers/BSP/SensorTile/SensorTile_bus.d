@@ -1,6 +1,6 @@
 Drivers/BSP/SensorTile/SensorTile_bus.o: \
- /Users/kevin/STM_workspace/COMSYS704/Drivers/BSP/SensorTile/SensorTile_bus.c \
- /Users/kevin/STM_workspace/COMSYS704/Drivers/BSP/SensorTile/SensorTile_bus.h \
+ C:/Users/User/Documents/compsys704_project2/Final/Drivers/BSP/SensorTile/SensorTile_bus.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Drivers/BSP/SensorTile/SensorTile_bus.h \
  ../../Inc/SensorTile_conf.h \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../../Inc/stm32l4xx_hal_conf.h \
@@ -47,7 +47,7 @@ Drivers/BSP/SensorTile/SensorTile_bus.o: \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pcd_ex.h \
  ../../../../../../Drivers/BSP/SensorTile/SensorTile_bus.h \
  ../../Inc/SensorTile_errno.h
-/Users/kevin/STM_workspace/COMSYS704/Drivers/BSP/SensorTile/SensorTile_bus.h:
+C:/Users/User/Documents/compsys704_project2/Final/Drivers/BSP/SensorTile/SensorTile_bus.h:
 ../../Inc/SensorTile_conf.h:
 ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../../Inc/stm32l4xx_hal_conf.h:

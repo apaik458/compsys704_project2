@@ -1,5 +1,5 @@
 Drivers/CMSIS/system_stm32l4xx.o: \
- /Users/kevin/STM_workspace/COMSYS704/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/system_stm32l4xx.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/system_stm32l4xx.c \
  ../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h \
  ../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h \
  ../../../../../../Drivers/CMSIS/Include/core_cm4.h \

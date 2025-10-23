@@ -1,5 +1,5 @@
 Middlewares/BlueNRG-MS/HCI/Controller/bluenrg_utils_small.o: \
- /Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/hci/controller/bluenrg_utils_small.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/hci/controller/bluenrg_utils_small.c \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_types.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_def.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_types.h \

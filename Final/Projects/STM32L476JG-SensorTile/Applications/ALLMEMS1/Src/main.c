@@ -241,9 +241,9 @@ static void readMag() {
 	magz = (inDataH[0] << 8) + inDataL[0];  // concatenate inDataH and inDataL
 
 	//#CS704 - store sensor values into the variables below
-//	MAG_Value.x = magx * 1.5;  // multiply by sensitivity parameter
-//	MAG_Value.y = magy * 1.5;
-//	MAG_Value.z = magz * 1.5;
+//	MAG_Value.x = (int)((float)magx * 1.5);  // multiply by sensitivity parameter
+//	MAG_Value.y = (int)((float)magy * 1.5);
+//	MAG_Value.z = (int)((float)magz * 1.5);
 
 	MAG_Value.x = magx;
 	MAG_Value.y = magy;
@@ -282,20 +282,18 @@ static void readAcc() {
 	ACC_Value.z = accz;
 }
 
-int local_max = 0;
-int local_min = 0;
-
+/**
+ * Low-pass filter for de-noising accelerometer data
+ */
+//	Yout is the current output
+//	Yprev is the previous output
+//	Xin is the current input
+//	d is the damping factor
 float Xin;
 float Yout;
 float Yprev;
+float d = 0.25;
 void LPF_A() {
-	//	Y[n] is the current output
-	//	Y[n-1] is the previous output
-	//	X[n] is the current input
-	//	d is the damping factor
-	float d = 0.25;
-
-	// Y[n] = dY[n-1] + (1-d)X[n]
 	Xin = ACC_Value.z;           // input
 	Yout = d*Yprev + (1-d)*Xin;  // filtered output
 	Yprev = Yout;
@@ -303,36 +301,17 @@ void LPF_A() {
 	ACC_Value.z = Yout;
 }
 
-float Xin_x, Xin_y;
-float Yout_x, Yout_y;
-float Xprev_x, Xprev_y;
-float Yprev_x, Yprev_y;
-void HPF_M() {
-	//	Y[n] is the current output
-	//	Y[n-1] is the previous output
-	//	X[n] is the current input
-	//  X[n-1] is the previous input
-	//	d is the damping factor
-	float d = 0.25;
-
-	// Y[n] = dY[n-1] + d(X[n] - X[n-1])
-	Xin_x = MAG_Value.x;           // input
-	Yout_x = d*Yprev_x + d*(Xin_x - Xprev_x);  // filtered output
-	Xprev_x = Xin_x;
-	Yprev_x = Yout_x;
-
-	Xin_y = MAG_Value.y;           // input
-	Yout_y = d*Yprev_y + d*(Xin_y - Xprev_y);  // filtered output
-	Xprev_y = Xin_y;
-	Yprev_y = Yout_y;
-
-	MAG_Value.x = Yout_x;
-	MAG_Value.y = Yout_y;
-}
-
+/**
+ * Step detection function
+ */
+// flags for local maximum/minimum detection
+int local_max = 0;
+int local_min = 0;
+// buffer for holding recent vertical accelerometer readings
 int buffer_n = 10;
 int y_buffer[10];
 void check_local() {
+	// threshold values for detecting local maximum/minimum
 	int max_threshold = 1250;
 	int min_threshold = 850;
 
@@ -353,6 +332,11 @@ void check_local() {
 	}
 }
 
+/**
+ * Orientation detection function
+ */
+// heading offset variable for relative orientation detection
+int heading_offset = -1;
 void calc_orientation() {
 	int heading_deg;
 
@@ -373,7 +357,8 @@ void calc_orientation() {
 		heading_deg = 0;
 	}
 
-	COMP_Value.Heading = heading_deg;
+	// algorithm is anti-clockwise positive, change to clockwise positive
+	COMP_Value.Heading = -heading_deg + 360;
 }
 
 /**
@@ -465,36 +450,40 @@ int main(void) {
 			readMag();
 			readAcc();
 
-			ACC_Value.x = 980;
-			ACC_Value.y = 980;
-
-			// magnetometer offset
+			// remove magnetometer offset
 			MAG_Value.x += 165;
 			MAG_Value.y += 90;
 
 			//*********process sensor data*********
 
 			// Accelerometer
-			LPF_A(); // low-pass filter
-			check_local(); // check for local maximum/minimum
-
-//			XPRINTF("Acceleration (mg) = %5d %5d %5d \r\n", ACC_Value.x, ACC_Value.y, ACC_Value.z);
+			LPF_A();        // apply low-pass filter
+			XPRINTF("Acceleration (mg) = %5d %5d %5d", ACC_Value.x, ACC_Value.y, ACC_Value.z);
 
 			// Magnetometer
-//			HPF_M(); // high-pass filter
-			calc_orientation();
+			XPRINTF("  |  Magnetometer (mG) = %5d %5d %5d \r\n", MAG_Value.x, MAG_Value.y, MAG_Value.z);
 
-//			XPRINTF("Magnetometer (mG) = %5d %5d %5d \r\n", MAG_Value.x, MAG_Value.y, MAG_Value.z);
-
-			// Step and orientation
-			if (local_max && local_min) {
+			// Step detection
+			check_local();  // check for local maximum/minimum
+			if (local_max && local_min) {  // update step count if step detected
 				COMP_Value.Steps++;
 				local_max = 0;
 				local_min = 0;
 			}
-
 //			XPRINTF("Steps = %d \r\n", (int)COMP_Value.Steps);
-//			XPRINTF("Orientation = %d \r\n", COMP_Value.Heading);
+
+			// Orientation detection
+			calc_orientation();  // calculate current orientation (relative to start)
+			if (heading_offset == -1) {  // set heading offset during initialisation
+				heading_offset = -COMP_Value.Heading;
+			}
+
+			int calibrated_angle = COMP_Value.Heading + heading_offset;  // apply heading offset
+			if (calibrated_angle < 0) {
+				calibrated_angle += 360;
+			}
+			COMP_Value.Heading = calibrated_angle;
+//			XPRINTF("Orientation = %d \r\n", (int)COMP_Value.Heading);
 		}
 
 		//***************************************************

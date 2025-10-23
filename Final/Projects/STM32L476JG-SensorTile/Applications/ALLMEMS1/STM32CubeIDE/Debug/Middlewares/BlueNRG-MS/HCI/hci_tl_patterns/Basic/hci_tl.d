@@ -1,5 +1,5 @@
 Middlewares/BlueNRG-MS/HCI/hci_tl_patterns/Basic/hci_tl.o: \
- /Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/hci/hci_tl_patterns/Basic/hci_tl.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/hci/hci_tl_patterns/Basic/hci_tl.c \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/hci_const.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/link_layer.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_def.h \
@@ -55,7 +55,7 @@ Middlewares/BlueNRG-MS/HCI/hci_tl_patterns/Basic/hci_tl.o: \
  ../../../../../../Middlewares/ST/BlueNRG-MS/utils/ble_list.h \
  ../../Inc/bluenrg_conf.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/hci.h \
- /Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/hci/hci_tl_patterns/Basic/hci_tl.h
+ C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/hci/hci_tl_patterns/Basic/hci_tl.h
 ../../../../../../Middlewares/ST/BlueNRG-MS/includes/hci_const.h:
 ../../../../../../Middlewares/ST/BlueNRG-MS/includes/link_layer.h:
 ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_def.h:
@@ -112,4 +112,4 @@ Middlewares/BlueNRG-MS/HCI/hci_tl_patterns/Basic/hci_tl.o: \
 ../../../../../../Middlewares/ST/BlueNRG-MS/utils/ble_list.h:
 ../../Inc/bluenrg_conf.h:
 ../../../../../../Middlewares/ST/BlueNRG-MS/includes/hci.h:
-/Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/hci/hci_tl_patterns/Basic/hci_tl.h:
+C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/hci/hci_tl_patterns/Basic/hci_tl.h:

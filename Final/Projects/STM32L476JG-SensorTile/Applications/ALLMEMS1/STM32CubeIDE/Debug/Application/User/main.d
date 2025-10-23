@@ -1,5 +1,5 @@
 Application/User/main.o: \
- /Users/kevin/STM_workspace/COMSYS704/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/main.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/main.c \
  ../../Inc/main.h ../../Inc/ALLMEMS1_config.h ../../Inc/ble_interface.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_types.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_gatt_server.h \

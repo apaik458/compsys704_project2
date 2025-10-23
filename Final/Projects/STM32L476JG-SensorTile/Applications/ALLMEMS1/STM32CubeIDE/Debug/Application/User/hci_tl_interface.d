@@ -1,5 +1,5 @@
 Application/User/hci_tl_interface.o: \
- /Users/kevin/STM_workspace/COMSYS704/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/hci_tl_interface.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/hci_tl_interface.c \
  ../../../../../../Middlewares/ST/BlueNRG-MS/hci/hci_tl_patterns/Basic/hci_tl.h \
  ../../Inc/hci_tl_interface.h ../../Inc/SensorTile_conf.h \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \

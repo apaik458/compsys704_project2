@@ -1,6 +1,6 @@
 Middlewares/BlueNRG-MS/Utils/ble_list.o: \
- /Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/utils/ble_list.c \
- /Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/utils/ble_list.h \
+ C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/utils/ble_list.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/utils/ble_list.h \
  ../../Inc/ble_list_utils.h \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../../Inc/stm32l4xx_hal_conf.h \
@@ -45,7 +45,7 @@ Middlewares/BlueNRG-MS/Utils/ble_list.o: \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pcd.h \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_usb.h \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pcd_ex.h
-/Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/utils/ble_list.h:
+C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/utils/ble_list.h:
 ../../Inc/ble_list_utils.h:
 ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../../Inc/stm32l4xx_hal_conf.h:

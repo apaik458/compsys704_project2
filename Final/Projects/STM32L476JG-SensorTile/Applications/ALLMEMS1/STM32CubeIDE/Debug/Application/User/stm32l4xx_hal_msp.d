@@ -1,5 +1,5 @@
 Application/User/stm32l4xx_hal_msp.o: \
- /Users/kevin/STM_workspace/COMSYS704/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/stm32l4xx_hal_msp.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Projects/STM32L476JG-SensorTile/Applications/ALLMEMS1/Src/stm32l4xx_hal_msp.c \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../../Inc/stm32l4xx_hal_conf.h \
  ../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \

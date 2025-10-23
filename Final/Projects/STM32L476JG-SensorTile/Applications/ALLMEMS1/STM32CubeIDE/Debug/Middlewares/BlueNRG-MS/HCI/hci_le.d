@@ -1,5 +1,5 @@
 Middlewares/BlueNRG-MS/HCI/hci_le.o: \
- /Users/kevin/STM_workspace/COMSYS704/Middlewares/ST/BlueNRG-MS/hci/hci_le.c \
+ C:/Users/User/Documents/compsys704_project2/Final/Middlewares/ST/BlueNRG-MS/hci/hci_le.c \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/hci_le.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/bluenrg_types.h \
  ../../../../../../Middlewares/ST/BlueNRG-MS/includes/link_layer.h \
